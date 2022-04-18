@@ -1,0 +1,22 @@
+<div class="pb-4 mt-3">
+  <div class="card shadow mb-3">
+      <div class="card-header py-2 d-flex align-items-center justify-content-between">
+          <h6 class="mt-2 font-weight-bold text-secondary">Personen</h6>
+          <div class="row">
+              <div class="mr-2">
+                  <a [routerLink]="['nieuw']" class="btn btn-primary btn-icon-split">
+                      <span class="icon text-white-50">
+                          <i class="fas fa-plus"></i>
+                      </span>
+                      <span class="d-none d-sm-block text">Persoon toevoegen</span>
+                  </a>
+              </div>
+
+          </div>
+      </div>
+      <app-table *ngIf="data" [data]="data" [query]="query" [cols]="columnHeader"
+          (onModalDeleteAction)="onDeleteModalContent($event)" (onAction)="onActionHandler($event)"
+          [showFilters]="true" [link]="link" [totalRecords]="totalRecords">
+      </app-table>
+  </div>
+</div>

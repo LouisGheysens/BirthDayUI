@@ -1,0 +1,32 @@
+<form *ngIf="personForm" [formGroup]="personForm" autocomplete="on" (ngSubmit)="submitPerson()">
+  <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Persoon</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body">
+
+
+      <div class="form-group row">
+      <label class="col-sm-2 col-form-label">Naam</label>
+      <div class="col-sm-10">
+      <input type="text"  class="form-control" formControlName="name">
+      </div>
+      </div>
+
+
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Woonplaats</label>
+        <div class="col-sm-10">
+        <input type="text"  class="form-control" formControlName="city">
+        </div>
+        </div>
+
+
+  <div class="modal-footer d-block py-0">
+      <div class="pb-3 mt-4 d-flex justify-content-between">
+          <button  [disabled]="personForm.invalid || formSubmit"  type="submit" class="btn btn-info">Bevestig</button>
+          <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">Annuleer</button>
+      </div>
+  </div>

@@ -1,0 +1,50 @@
+.mat-table {
+  overflow: auto;
+  max-height: 600px;
+}
+.mat-row {
+  position: relative;
+}
+.mat-cell {
+  color: #858796;
+}
+
+.mat-table {
+  font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+}
+.mat-table thead,
+mat-header-row,
+[mat-header-row],
+.mat-table-sticky {
+  background: inherit;
+  background-color: #549ae1;
+  color: rgba(255, 255, 255, 0.8);
+  // background-color: rgba(0, 0, 0, 0.048);
+}
+.table td,
+.table th {
+  padding-bottom: 14px;
+}
+.table .filters td,
+.table .filters th  {
+  padding-bottom: 12px !important;
+}
+tr.filters{
+  background-color: #fff;
+}
+
+.rowOne {
+  width:  10%;
+}
+
+.btn-circle.btn-sm,
+.btn-group-sm > .btn-circle.btn {
+  height: 1.5rem;
+  width: 1.5rem;
+  font-size: 0.75rem;
+}
+
+.table thead tr td:nth-child(1) {
+  background-color: rebeccapurple;
+}

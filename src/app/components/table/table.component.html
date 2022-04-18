@@ -1,0 +1,182 @@
+<div class="card-body pt-0">
+  <div class="table-responsive">
+      <mat-paginator *ngIf="showFilters" [pageIndex]="query.page! - 1" [length]="inputData.totalRecords"
+          [pageSize]="query.pageSize" [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons
+          (page)="pageEvent = getPaginatorData($event)"></mat-paginator>
+
+      <table class="table table-bordered table-striped mb-0" width="100%" cellspacing="0" mat-table *ngIf="dataSource"
+          [dataSource]="dataSource" matSort multiTemplateDataRows (matSortChange)="sortData($event)"
+          [matSortActive]="matSortActive!" [matSortDirection]="query.orderBy!.includes('desc') ? 'desc' : 'asc'">
+          <!-- Generic column defintion -->
+          <ng-container *ngFor="let column of inputColumns; trackBy0: trackByFunc" [matColumnDef]="column.name">
+              <thead>
+                  <th class="rowOne" *matHeaderCellDef mat-sort-header [width]="column.width" [disabled]="column.sort == false">
+                      <span [innerHtml]="column.displayName"></span>
+                  </th>
+              </thead>
+
+              <td mat-cell *matCellDef="let element" [width]="column.width" style="padding: 0.75rem;">
+                  <div [ngSwitch]="column.columnType">
+                      <div *ngSwitchCase="'info'">
+                          <a [routerLink]="['/' + link, element.id]" class="btn btn-primary btn-sm btn-circle"
+                              [ngbTooltip]="'Detail'" placement="top" container="body">
+                              <i class="fas fa-fw fa-info"></i>
+                          </a>
+                      </div>
+                      <div *ngSwitchCase="'editModal'">
+                          <button class="btn btn-primary btn-sm btn-circle" (click)="openModalContent(element)"
+                              [ngbTooltip]="'Bewerk'" placement="top" container="body">
+                              <i class="fas fa-fw fa-edit"></i>
+                          </button>
+                      </div>
+                      <div *ngSwitchCase="'delete'">
+                          <button class="btn btn-circle btn-danger btn-sm cursor-pointer ml-1 text-gray-100"
+                              [ngbTooltip]="'Verwijder'" placement="top" container="body"
+                              (click)="openDeleteModalContent(element.id)">
+                              <i class=" fas fa-trash-alt"></i>
+                          </button>
+                      </div>
+                      <div *ngSwitchCase="'download'">
+                          <button class="btn btn-primary btn-sm btn-circle btn-sm cursor-pointer ml-1 text-gray-100"
+                              (click)="selectAction(element.id)" [ngbTooltip]="'Download'" placement="top"
+                              container="body">
+                              <i class="fas fa-download"></i>
+                          </button>
+                      </div>
+                      <div *ngSwitchCase="'select'">
+                          <div
+                              class="custom-control custom-checkbox custom-checkbox custom-control d-flex justify-content-center">
+                              <input type="checkbox" class="custom-control-input" name="select{{element.id}}"
+                                  id="select{{element.id}}" (click)="itemSelected(element.id)">
+                              <label class="custom-control-label" for="select{{element.id}}"></label>
+                          </div>
+                          <div *ngIf="element['active'] == 2"
+                              class="custom-control custom-checkbox custom-checkbox custom-control d-flex justify-content-center">
+                              <input type="checkbox" class="custom-control-input" name="select{{element.id}}"
+                                  id="select{{element.id}}" (click)="itemSelected(element.id)">
+                              <label class="custom-control-label" for="select{{element.id}}"></label>
+                          </div>
+                      </div>
+                      <div *ngSwitchCase="'editAndDelete'">
+                          <button class="btn btn-primary btn-sm btn-circle" (click)="openModalContent(element)"
+                              [ngbTooltip]="'Bewerk'" placement="top" container="body">
+                              <i class="fas fa-fw fa-edit"></i>
+                          </button>
+                          <button class="btn btn-circle btn-danger btn-sm cursor-pointer ml-1 text-gray-100"
+                              (click)="openDeleteModalContent(element.id)" [ngbTooltip]="'Verwijder'" placement="top"
+                              container="body">
+                              <i class=" fas fa-trash-alt"></i>
+                          </button>
+                      </div>
+                      <div *ngSwitchCase="'infoAndMail'">
+                          <a [routerLink]="['/' + link, element.id]" class="btn btn-primary btn-sm btn-circle"
+                              [ngbTooltip]="'Detail'" placement="top" container="body">
+                              <i class="fas fa-fw fa-info"></i>
+                          </a>
+                          <button class="btn btn-circle btn-primary btn-sm cursor-pointer ml-1 text-gray-100"
+                              [ngbTooltip]="'Verstuur'" placement="top"
+                              container="body">
+                              <i class="fas fa-envelope"></i>
+                          </button>
+                      </div>
+                      <div *ngSwitchCase="'infoAndCancel'">
+                          <a [routerLink]="['/' + link, element.id]" class="btn btn-primary btn-sm btn-circle"
+                              [ngbTooltip]="'Detail'" placement="top" container="body">
+                              <i class="fas fa-fw fa-info"></i>
+                          </a>
+                          <button class="btn btn-circle btn-danger btn-sm cursor-pointer ml-1 text-gray-100"
+                              (click)="openDeleteModalContent(element.id)" [ngbTooltip]="'Verwijder (annuleer)'"
+                              placement="top" container="body">
+                              <i class="fas fa-ban"></i>
+                          </button>
+                      </div>
+
+                      <div *ngSwitchCase="'infoAndDelete'">
+                          <a [routerLink]="['/' + link, element.id]" class="btn btn-primary btn-sm btn-circle"
+                              [ngbTooltip]="'Detail'" placement="top" container="body">
+                              <i class="fas fa-fw fa-info"></i>
+                          </a>
+                          <button class="btn btn-circle btn-danger btn-sm cursor-pointer ml-1 text-gray-100"
+                              (click)="openDeleteModalContent(element.id)" [ngbTooltip]="'Verwijder'" placement="top"
+                              container="body">
+                              <i class=" fas fa-trash-alt"></i>
+                          </button>
+                      </div>
+                      <div *ngSwitchCase="'invoiceList'">
+                          <a [routerLink]="['/' + link, element.id]" class="btn btn-primary btn-sm btn-circle"
+                              [ngbTooltip]="'Detail'" placement="top" container="body">
+                              <i class="fas fa-fw fa-info"></i>
+                          </a>
+                          <button [ngClass]="element['latestMailDate'] ? 'btn-success' : 'btn-info'"
+                              class="btn btn-circle btn-sm cursor-pointer ml-1 text-gray-100"
+                              [ngbTooltip]="'Verstuur'" placement="top"
+                              container="body">
+                              <i class="fas fa-envelope"></i>
+                          </button>
+                          <button class="btn btn-circle btn-warning btn-sm cursor-pointer ml-1 text-gray-100"
+
+                              container="body">
+                              <i class="fas fa-download"></i>
+                          </button>
+                          <button class="btn btn-circle btn-danger btn-sm cursor-pointer ml-1 text-gray-100"
+                              (click)="openDeleteModalContent(element.id)" [ngbTooltip]="'Verwijder'" placement="top"
+                              container="body">
+                              <i class=" fas fa-trash-alt"></i>
+                          </button>
+                      </div>
+                      <div *ngSwitchCase="'date'"
+                         >
+                          <span *ngIf="element[column.name] !== '0001-01-01T00:00:00'">
+                              {{ element[column.name] | date: "dd/MM/yyyy" }}
+                          </span>
+                      </div>
+                      <div *ngSwitchCase="'hour'">
+                          <span *ngIf="element[column.name] !== '0001-01-01T00:00:00'">
+                              {{ element[column.name] | date: "HH:mm:ss" }}
+                          </span>
+                      </div>
+                      <div *ngSwitchCase="'percentage'">
+                          {{ element[column.name] | number:'1.2-2' }} %
+                      </div>
+                      <div *ngSwitchCase="'boolean'">
+                          <div [ngSwitch]="element[column.name]">
+                              <div *ngSwitchCase="false" class="text-danger">Niet actief
+                              </div>
+                              <div *ngSwitchCase="true" class="text-success">Actief
+                              </div>
+                              <div *ngSwitchDefault></div>
+                          </div>
+                      </div>
+                      <div *ngSwitchDefault>
+                          <div [ngSwitch]="column.name">
+                              <div *ngSwitchCase="'color'" [style.backgroundColor]="element[column.name]"
+                                  style="color: white;">
+                                  {{ element[column.name] }}
+                              </div>
+                              <div *ngSwitchDefault
+                               >
+                                  <span [class]="column.class" [innerHtml]="element[column.name]"></span>
+                              </div>
+                          </div>
+
+                      </div>
+                  </div>
+              </td>
+          </ng-container>
+
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <div *ngIf="showFilters">
+              <tr mat-header-row *matHeaderRowDef="filterColumns" class="filters"></tr>
+          </div>
+
+          <tr class="mat-row" *matNoDataRow>
+              <td class="text-center pt-3" colspan="9999">
+                  <span>Geen zoekresultaten gevonden...</span>
+              </td>
+          </tr>
+
+      </table>
+      </div>
+  </div>
