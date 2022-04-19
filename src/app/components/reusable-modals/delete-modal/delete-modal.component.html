@@ -1,1 +1,17 @@
-<p>delete-modal works!</p>
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Verwijderen</h4>
+  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  Bent u zeker dat u dit wilt verwijderen?
+</div>
+
+<div class="modal-footer d-block py-0">
+  <div class="pb-3 mt-4 d-flex justify-content-between">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">Annuleren</button>
+      <button type="button" class="btn btn-outline-danger" (click)="modal.close('Save click')">Verwijderen</button>
+  </div>
+
+</div>

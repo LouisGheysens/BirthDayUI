@@ -16,7 +16,7 @@
       </div>
       <app-table *ngIf="data" [data]="data" [query]="query" [cols]="columnHeader"
           (onModalDeleteAction)="onDeleteModalContent($event)" (onAction)="onActionHandler($event)"
-          [showFilters]="true" [link]="link" [totalRecords]="totalRecords">
+          [showFilters]="true" ![totalRecords]="totalRecords">
       </app-table>
   </div>
 </div>

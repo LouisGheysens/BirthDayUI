@@ -9,6 +9,7 @@ import { ServiceResponse } from 'src/app/models/ServiceResponse';
 import { BreadcrumbService } from 'src/app/services/breadcrumb.service';
 import { PersonService } from 'src/app/services/person.service';
 import { DeleteModalComponent } from '../../reusable-modals/delete-modal/delete-modal.component';
+import { PersonDetailComponent } from './../person-detail/person-detail.component';
 
 @Component({
   selector: 'app-person-list',
@@ -18,7 +19,7 @@ import { DeleteModalComponent } from '../../reusable-modals/delete-modal/delete-
 export class PersonListComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   public data: ServiceResponse<Person[]> | undefined;
-  public totalRecords: number | undefined;
+  public totalRecords!: number;
 
   query: QueryDef = {
     filter: '',
@@ -51,10 +52,34 @@ export class PersonListComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.personService.getPersons(query).subscribe((response: ServiceResponse<Person[]>) => {
         this.data = response;
-        this.totalRecords = response.totalRecords;
+        this.totalRecords = response.totalRecords!;
       })
     );
   }
+
+
+  openObjectCreationModal(items: Person){
+    this.modalService.open(PersonDetailComponent, {centered: true, size: 'lg'}).result.then(
+      () => {
+        this.onActionHandler(this.query);
+      }
+    )
+  }
+
+  openModal(items: Person) {
+    this.subscriptions.push(
+      this.personService.getPerson(items.id!).subscribe((response: ServiceResponse<Person>) => {
+        const modalRef = this.modalService.open(PersonDetailComponent, { centered: true, size: 'lg'})
+        modalRef.componentInstance.form = response;
+        modalRef.componentInstance.clubId = items.id;
+        modalRef.result.then((result) => {
+          this.onActionHandler(this.query);
+        })
+      })
+    )
+  }
+
+
 
   onDeleteModalContent(id: any) {
     this.modalService.open(DeleteModalComponent, { centered: true }).result.then(

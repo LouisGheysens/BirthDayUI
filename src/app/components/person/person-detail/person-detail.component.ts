@@ -82,7 +82,9 @@ export class PersonDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  private formSetup(person: Person): void {}
+  private formSetup(person: Person): void {
+    
+  }
 
   private getPerson(){
     this.subscriptions.push(
